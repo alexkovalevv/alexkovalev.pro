@@ -15,12 +15,15 @@ Route::get('/fetch-title', function (Request $request) {
     }
 
     try {
-        // Получаем содержимое страницы
-        $response = Http::get($url);
+        $response = Http::withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+            'Accept-Language' => 'ru-RU,en;q=0.9' // Язык - английский
+        ])->get($url);
 
         if ($response->successful()) {
-            // Парсим HTML и извлекаем заголовок
             $html = $response->body();
+
+            // Извлечение заголовка страницы
             preg_match('/<title>(.*?)<\/title>/s', $html, $matches);
             $title = $matches[1] ?? 'No title found';
 
@@ -32,4 +35,5 @@ Route::get('/fetch-title', function (Request $request) {
         return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
     }
 });
+
 
