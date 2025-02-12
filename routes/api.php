@@ -7,29 +7,43 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
 Route::get('/fetch-title', function (Request $request) {
+    $apiKey = 'AIzaSyCEKmua1S0TSp2NVCtjkU4E1tJVPXG1Zlg'; // Вставьте ваш API Key
     $url = $request->query('url');
 
+    // Проверяем, есть ли канал в URL
     if (!$url) {
         return response()->json(['error' => 'URL is required'], 400);
     }
 
+    // Извлекаем ID канала из URL
+    preg_match('/channel\/([a-zA-Z0-9_\-]+)/', $url, $matches);
+    $channelId = $matches[1] ?? null;
+
+    if (!$channelId) {
+        return response()->json(['error' => 'Invalid YouTube URL'], 400);
+    }
+
     try {
-        $response = Http::withHeaders([
-            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
-            'Accept-Language' => 'ru-RU,en;q=0.9' // Язык - английский
-        ])->get($url);
+        // Формируем URL для API YouTube
+        $apiUrl = "https://www.googleapis.com/youtube/v3/channels?part=snippet&id={$channelId}&key={$apiKey}";
+
+        // Отправляем запрос к YouTube Data API
+        $response = Http::get($apiUrl);
 
         if ($response->successful()) {
-            $html = $response->body();
+            $data = $response->json();
 
-            // Извлечение заголовка страницы
-            preg_match('/<title>(.*?)<\/title>/s', $html, $matches);
-            $title = $matches[1] ?? 'No title found';
+            var_dump($data);
+            exit;
+
+            // Получаем заголовок канала
+            $title = $data['items'][0]['snippet']['title'] ?? 'No title found';
 
             return response()->json(['title' => $title]);
         } else {
-            return response()->json(['error' => 'Unable to fetch the URL'], $response->status());
+            return response()->json(['error' => 'Unable to fetch channel information'], $response->status());
         }
     } catch (\Exception $e) {
         return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
