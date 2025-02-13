@@ -10,7 +10,7 @@ import puppeteer from 'puppeteer';
     }
 
     const browser = await puppeteer.launch({
-        headless: "new", // Используем новый headless режим
+        headless: false, // Используем новый headless режим
         executablePath: '/var/www/alexkovalev__usr/data/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome', // Укажите путь
         args: [
             '--no-sandbox',               // Убирает ограничения в sandbox
