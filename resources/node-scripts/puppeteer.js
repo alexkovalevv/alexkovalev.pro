@@ -10,9 +10,10 @@ import puppeteer from 'puppeteer';
     }
 
     const browser = await puppeteer.launch({
-        executablePath: '/var/www/alexkovalev__usr/data/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome',
+        headless: "new", // Запуск в headless-режиме
+        executablePath: '/var/www/alexkovalev__usr/data/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome', // Укажите путь
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Аргументы для запуска
     });
-
 
     //const browser = await puppeteer.launch();
     const page = await browser.newPage();
