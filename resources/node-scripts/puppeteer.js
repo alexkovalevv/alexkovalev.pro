@@ -9,7 +9,11 @@ import puppeteer from 'puppeteer';
         process.exit(1);
     }
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        executablePath: '/root/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome', // Укажите путь к браузеру
+    });
+
+    //const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36');
