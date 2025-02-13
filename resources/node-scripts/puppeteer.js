@@ -10,8 +10,9 @@ import puppeteer from 'puppeteer';
     }
 
     const browser = await puppeteer.launch({
-        executablePath: '/root/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome', // Укажите путь к браузеру
+        executablePath: '/var/www/alexkovalev__usr/data/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome',
     });
+
 
     //const browser = await puppeteer.launch();
     const page = await browser.newPage();
