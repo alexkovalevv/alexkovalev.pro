@@ -10,9 +10,17 @@ import puppeteer from 'puppeteer';
     }
 
     const browser = await puppeteer.launch({
-        headless: "new", // Запуск в headless-режиме
+        headless: "new", // Используем новый headless режим
         executablePath: '/var/www/alexkovalev__usr/data/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome', // Укажите путь
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Аргументы для запуска
+        args: [
+            '--no-sandbox',               // Убирает ограничения в sandbox
+            '--disable-setuid-sandbox',   // Отключает sandbox
+            '--disable-gpu',              // Отключаем GPU (не нужно в headless режиме)
+            '--disable-extensions',       // Отключаем расширения
+            '--disable-dev-shm-usage',    // Убираем использование /dev/shm
+            '--no-zygote',                // Отключаем zygote (поток изоляции)
+            '--single-process'            // Запуск в отдельном процессе
+        ],
     });
 
     //const browser = await puppeteer.launch();
